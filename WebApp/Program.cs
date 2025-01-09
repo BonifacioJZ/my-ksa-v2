@@ -1,17 +1,22 @@
 using Microsoft.EntityFrameworkCore;
 using WebApp;
+using WebApp.Service;
+using WebApp.Service.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 var connection = builder.Configuration.GetConnectionString("Test");
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
 //Configuracion de la base de datos
 builder.Services.AddDbContext<Context>(
     cfg=>{
         cfg.UseSqlite(connection);
     }
 );
+
+// Registra el servicio ICategoryService con su implementación CategoryService en el contenedor de inyección de dependencias.
+// AddScoped especifica que el servicio se crea una vez por solicitud dentro del alcance.
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 var app = builder.Build();
 
