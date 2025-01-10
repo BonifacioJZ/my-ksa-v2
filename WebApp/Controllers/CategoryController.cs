@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using WebApp.Data;
+using WebApp.Dto.Category;
 using WebApp.Models;
 using WebApp.Service.Interface;
 
@@ -38,6 +39,29 @@ namespace WebApp.Controllers
         }
         public IActionResult New(){
             return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Store([Bind("Name","Description")]CategoryInDto category){
+            if(!ModelState.IsValid){
+                TempData["Error_data"]="Los datos de la categoria son incorrectos";
+                return View("New",category);
+            }
+            
+            var categoryOutDto = await _categoryService.Create(category);
+            if(categoryOutDto == null){
+                TempData["Error_data"]="Error al crear la categoria";
+                return View("New",category);
+            }
+
+            TempData["Success_data"]="La categoria se ha creado correctamente";
+            return RedirectToAction(nameof(Index));
+        }
+        public async Task<ActionResult> Show(Guid id){
+            var category = await _categoryService.FindById(id);
+            
+            if(category == null) return NotFound();
+            return View(category);
         }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

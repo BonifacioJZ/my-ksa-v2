@@ -13,6 +13,8 @@ namespace WebApp.Mapper
         public ProfileCategory()
         {
             CreateMap<Category, CategoryInDto>().ReverseMap();
+            CreateMap<Category,CategoryOutDto>().ReverseMap();
+            CreateMap<Category,CategoryDetailsDto>().ReverseMap();
         }
     }
 }

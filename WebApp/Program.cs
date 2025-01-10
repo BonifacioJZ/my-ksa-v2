@@ -5,6 +5,8 @@ using WebApp.Service.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 var connection = builder.Configuration.GetConnectionString("Test");
+//AutoMapper Configuration
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 //Configuracion de la base de datos
