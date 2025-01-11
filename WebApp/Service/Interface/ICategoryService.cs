@@ -12,5 +12,9 @@ namespace WebApp.Service.Interface
         IQueryable<Category> All(string search, string currentOrder);
         Task<CategoryOutDto?> Create(CategoryInDto categoryInDto);
         Task<CategoryDetailsDto?> FindById(Guid id);
+        Task<CategoryEditDto?> Edit(Guid id);
+        Task<CategoryEditDto?> Update(CategoryEditDto categoryEditDto);
+        bool Exists(Guid id);
+        void Destroy(Guid id);
     }
 }

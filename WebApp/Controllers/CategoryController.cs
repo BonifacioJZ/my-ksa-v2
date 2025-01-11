@@ -63,6 +63,53 @@ namespace WebApp.Controllers
             if(category == null) return NotFound();
             return View(category);
         }
+        public async Task<ActionResult> Edit(Guid id){
+            var category = await _categoryService.Edit(id);
+            
+            if(category == null) return NotFound();
+            return View(category);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Update(Guid id,[Bind("Id","Name","Description")]CategoryEditDto category){
+            if(id != category.Id) return NotFound();
+            if(!ModelState.IsValid) {
+                
+                TempData["Error_data"] ="El Intento de Actualizacion no Valido";
+                return View("Edit",category);
+                
+                }
+                try{
+                    await _categoryService.Update(category);
+                }catch(DbUpdateConcurrencyException){
+                    if(!_categoryService.Exists(id)){
+                        return NotFound();
+                    }else{
+                        TempData["Error_data"] ="El Intento de Actualizacion no Valido";
+                        throw ;
+                    }
+                }
+                
+                TempData["Success_data"]="La categoria se a actualizado correctamente";
+                return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<ActionResult> Delete(Guid id){
+            
+            var category = await _categoryService.FindById(id);
+            
+            if(category == null) return NotFound();
+            
+        return View(category);
+        }
+        [HttpPost,ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult Destroy(Guid id){
+            _categoryService.Destroy(id);
+            TempData["Success_data"]="La categoria se ha eliminado correctamente";
+            return RedirectToAction(nameof(Index));
+        }
+        
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

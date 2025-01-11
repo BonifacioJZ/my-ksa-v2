@@ -74,15 +74,96 @@ namespace WebApp.Service
             return categoryOutDto;
         }
 
+        /// <summary>
+        /// Elimina una categoría por su ID.
+        /// </summary>
+        /// <param name="id">ID de la categoría a eliminar.</param>
+        public async void Destroy(Guid id)
+        {
+            // Busca la categoría por ID.
+            var category = await this.Found(id);
+            
+            // Si la categoría existe, la elimina del contexto.
+            if (category != null)
+            {
+                this._context.Categories.Remove(category);
+            }
+            
+            // Guarda los cambios en la base de datos de manera asíncrona.
+            await this._context.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// Edita una categoría existente.
+        /// </summary>
+        /// <param name="id">ID de la categoría a editar.</param>
+        /// <returns>DTO de edición de la categoría, o null si no se encuentra.</returns>
+        public async Task<CategoryEditDto?> Edit(Guid id)
+        {
+            // Busca la categoría por ID y la mapea a un DTO de edición.
+            var category = _mapper.Map<CategoryEditDto>(await this.Found(id));
+            return category;
+        }
+
+        /// <summary>
+        /// Verifica si una categoría existe.
+        /// </summary>
+        /// <param name="id">ID de la categoría a verificar.</param>
+        /// <returns>True si la categoría existe, false en caso contrario.</returns>
+        public bool Exists(Guid id)
+        {
+            // Verifica si alguna categoría en el contexto tiene el ID especificado.
+            return (_context.Categories?.Any(c => c.Id == id)).GetValueOrDefault();
+        }
+
+        /// <summary>
+        /// Encuentra una categoría por su ID.
+        /// </summary>
+        /// <param name="id">ID de la categoría a encontrar.</param>
+        /// <returns>DTO con los detalles de la categoría, o null si no se encuentra.</returns>
         public async Task<CategoryDetailsDto?> FindById(Guid id)
         {
+            // Busca la categoría por ID y la mapea a un DTO de detalles.
             var category = _mapper.Map<CategoryDetailsDto>(await Found(id));
             return category;
         }
+
+        /// <summary>
+        /// Actualiza una categoría existente.
+        /// </summary>
+        /// <param name="categoryEditDto">DTO de edición con los datos actualizados de la categoría.</param>
+        /// <returns>DTO de edición de la categoría actualizada, o null si la operación falla.</returns>
+        public async Task<CategoryEditDto?> Update(CategoryEditDto categoryEditDto)
+        {
+            // Mapea el DTO de edición a la entidad Category.
+            var category = _mapper.Map<Category>(categoryEditDto);
+            
+            // Actualiza la categoría en el contexto.
+            _context.Categories.Update(category);
+            
+            // Guarda los cambios en la base de datos de manera asíncrona.
+            var result = await _context.SaveChangesAsync();
+
+            // Si no se guardaron cambios, retorna null.
+            if(result == 0) return null;
+            
+            // Mapea la entidad Category actualizada a un DTO de edición.
+            var category_out = _mapper.Map<CategoryEditDto>(category);
+            
+            // Retorna el DTO de edición de la categoría actualizada.
+            return category_out;
+        }
+
+        /// <summary>
+        /// Busca una categoría por su ID.
+        /// </summary>
+        /// <param name="id">ID de la categoría a buscar.</param>
+        /// <returns>La entidad Category si se encuentra, o null si no se encuentra.</returns>
         private async Task<Category?> Found(Guid id)
         {
-        var category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == id);
-        return category;
+            // Busca la primera categoría que coincida con el ID especificado.
+            var category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == id);
+            return category;
         }
     }
 }

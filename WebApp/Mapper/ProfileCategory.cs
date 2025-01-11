@@ -15,6 +15,7 @@ namespace WebApp.Mapper
             CreateMap<Category, CategoryInDto>().ReverseMap();
             CreateMap<Category,CategoryOutDto>().ReverseMap();
             CreateMap<Category,CategoryDetailsDto>().ReverseMap();
+            CreateMap<Category,CategoryEditDto>().ReverseMap();
         }
     }
 }
