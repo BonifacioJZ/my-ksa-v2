@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebApp;
+using WebApp.Models;
 using WebApp.Service;
 using WebApp.Service.Interface;
 
@@ -19,6 +22,27 @@ builder.Services.AddDbContext<Context>(
 // Registra el servicio ICategoryService con su implementación CategoryService en el contenedor de inyección de dependencias.
 // AddScoped especifica que el servicio se crea una vez por solicitud dentro del alcance.
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+
+//Authentication configuration
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(opt=>{
+        opt.LoginPath="/login";
+        opt.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+    });
+builder.Services.AddSession();
+
+//Add User Identity
+builder.Services.AddIdentity<User,Role>(
+    opt=>{
+        opt.Password.RequiredUniqueChars = 0;
+        opt.Password.RequiredLength = 8;
+        opt.Password.RequireNonAlphanumeric = false;
+        opt.Password.RequireUppercase = false;
+        opt.Password.RequireLowercase = false;
+    }
+)
+    .AddRoles<Role>()
+    .AddEntityFrameworkStores<Context>().AddDefaultTokenProviders();
 
 var app = builder.Build();
 

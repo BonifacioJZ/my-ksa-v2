@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WebApp.Models;
+using WebApp.Seed;
 
 namespace WebApp
 {
@@ -11,7 +13,7 @@ namespace WebApp
     /// Contexto de la base de datos para la aplicación WebApp.
     /// Hereda de DbContext de Entity Framework Core.
     /// </summary>
-    public class Context : DbContext
+    public class Context : IdentityDbContext<User, Role, string>
     {
         /// <summary>
         /// Constructor que recibe opciones de configuración para el contexto.
@@ -30,9 +32,9 @@ namespace WebApp
         {
             base.OnModelCreating(builder);
             // Descomentar las siguientes líneas para aplicar configuraciones específicas
-            // builder.ApplyConfiguration(new RoleConfiguration());
-            // builder.ApplyConfiguration(new UserConfiguration());
-            // builder.ApplyConfiguration(new UserRoleConfiguration());
+            builder.ApplyConfiguration(new RoleConfiguration());
+            builder.ApplyConfiguration(new UserConfiguration());
+            builder.ApplyConfiguration(new RoleUserConfiguration());
         }
         public DbSet<Category> Categories {get;set;}
 

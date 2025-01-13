@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApp;
 
@@ -10,9 +11,11 @@ using WebApp;
 namespace WebApp.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20250113200124_UserRoleMigrations")]
+    partial class UserRoleMigrations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.11");
@@ -98,13 +101,6 @@ namespace WebApp.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "6f41b021-3b66-484f-a673-7596f9c1aa07",
-                            RoleId = "87e55637-05ef-45e1-8eb9-d881cdefa88b"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -172,29 +168,6 @@ namespace WebApp.Migrations
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "87e55637-05ef-45e1-8eb9-d881cdefa88b",
-                            Description = "",
-                            Name = "Root",
-                            NormalizedName = "ROOT"
-                        },
-                        new
-                        {
-                            Id = "8d1348e5-a2c7-4a7a-8cb4-b7ccb2d2b9c9",
-                            Description = "",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = "d2bdbfba-77b1-40f5-b00d-3c4704154589",
-                            Description = "",
-                            Name = "User",
-                            NormalizedName = "User"
-                        });
                 });
 
             modelBuilder.Entity("WebApp.Models.User", b =>
@@ -267,26 +240,6 @@ namespace WebApp.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "6f41b021-3b66-484f-a673-7596f9c1aa07",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "e00c7e5c-67e3-4ea8-a09a-0436f73dbe0e",
-                            Email = "root@root.com",
-                            EmailConfirmed = false,
-                            FirstName = "Admin",
-                            LastNAme = "Root",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ROOT@ROOT.COM",
-                            NormalizedUserName = "ROOT",
-                            PasswordHash = "AQAAAAIAAYagAAAAEFyE3FnOU0KNSKZD9N24Nm6mnPi+1aqEtxb/4tETI4PF4aPzzghWfBTpXMZuiCjOpw==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "e8a76447-cad7-4f9e-8b0c-c08f29b28e98",
-                            TwoFactorEnabled = false,
-                            UserName = "Root"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
