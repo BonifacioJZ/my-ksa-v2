@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebApp;
+using WebApp.Filter;
 using WebApp.Models;
 using WebApp.Service;
 using WebApp.Service.Interface;
@@ -12,6 +13,9 @@ var connection = builder.Configuration.GetConnectionString("Test");
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(opt=>{
+    opt.Filters.Add<VerifySession>();
+});
 //Configuracion de la base de datos
 builder.Services.AddDbContext<Context>(
     cfg=>{
@@ -22,6 +26,7 @@ builder.Services.AddDbContext<Context>(
 // Registra el servicio ICategoryService con su implementación CategoryService en el contenedor de inyección de dependencias.
 // AddScoped especifica que el servicio se crea una vez por solicitud dentro del alcance.
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 //Authentication configuration
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
