@@ -27,7 +27,7 @@ builder.Services.AddDbContext<Context>(
 // AddScoped especifica que el servicio se crea una vez por solicitud dentro del alcance.
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IUserService, UserService>();
-
+builder.Services.AddScoped<IRoleService, RoleService>();
 //Authentication configuration
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(opt=>{
