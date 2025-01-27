@@ -1,0 +1,50 @@
+@model WebApp.Dto.Authentication.LoginDto
+@{
+    ViewData["Title"] = "Login";
+}
+
+@if(TempData["Error_data"]!= null){
+    <div class="m-0 pt-2 row justify-content-center align-items-center">
+        <div class="col-auto p-1 text-center">
+            <div class="alert alert-dismissible alert-danger">
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                @TempData["Error_data"]
+            </div>
+        </div>
+    </div>
+    }
+
+<div class="row d-flex p-3 align-items-center justify-content-center">
+    <div class="col-md-5 card p-3">
+        <h2 class="text-center text-info">Inicio de Sesión</h2>
+        <form asp-action="Login" method="post">
+            <div asp-validation-summary="ModelOnly"></div>
+            <div class="mb-1 p-1">
+                <label asp-for="Username"></label>
+                <input type="text" asp-for="Username" id="Username" class="form-control">
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+            <div class="mb-1 p-1">
+                <label asp-for="Password"></label>
+                <input class="form-control" type="password" asp-for="Password" id="">
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="mb-1 form-check">
+                <label asp-for="RememberMe">
+                    <input type="checkbox" asp-for="RememberMe" class="form-check-input" id="">@Html.DisplayNameFor(m => m.RememberMe)
+                </label>
+            </div>
+            <div class="row p-3">
+                <div class="btn-group">
+                    <input type="submit" class="btn btn-primary" value="Inicio">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,77 @@
+@using WebApp.Models;
+@using WebApp.Data;
+@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<User> signInManager
+@model Pagination<Role>;
+@{
+    ViewData["Title"] = "Roles";
+    var previousWeakened = !Model.previousPages ? "disabled":"";
+    var nextWeakened = !Model.nextPages ? "disabled":"";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if(TempData["Success_data"]!= null){
+    <div class="m-0 pt-2 row justify-content-center align-items-center">
+        <div class="col-auto p-1 text-center">
+            <div class="alert alert-dismissible alert-success">
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                @TempData["Success_data"]
+            </div>
+        </div>
+    </div>
+}
+@if(User.IsInRole("Root")){
+<p>
+    <a asp-action="Create" asp-controller="Role" class="btn btn-success">Nuevo Rol</a>
+</p>
+}
+<div class="table-responsive-md">
+    <table class="table">
+            <thead class="table-light">
+                <th>Nombre</th>
+                <th>Acciones</th>
+            </thead>
+            <tbody>
+                @foreach(var item in Model){
+                    <tr>
+                        <th>
+                            @Html.DisplayFor(modelItem=>item.Name)
+                        </th>
+                        <th>
+                            
+                            <div class="btn-group btn-group-sm">
+                                <a asp-controller="Role" asp-action="Show" asp-route-id="@item.Id"  class="btn btn-primary btn-sm">Ver</a>
+                                @if(User.IsInRole("Root")){
+                                <a asp-controller="Role" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Editar</a>
+                                <a asp-controller="Role" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm"  >Eliminar</a>
+                                }
+                            </div>
+                        </th>
+                    </tr>
+                }
+            </tbody>
+    </table>
+    @if(Model.pageSize>0){
+        <nav>
+        <ul class="pagination">
+            <li class="page-item">
+                <a asp-action="Index" class="page-link @previousWeakened" asp-route-numPage="@(Model.initPage-1)" >
+                            <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            @for(var i=Model.startPage; i<=Model.endPage;i++){
+                var activePage =(i==Model.initPage)? "active disable":"";
+                <li class="page-item">
+                    <a asp-action="Index" asp-route-numPage="@i" class="page-link @activePage">@i</a>
+                </li>
+            }
+            <li class="page-item">
+                <a  class="page-link @nextWeakened" asp-action="Index" asp-route-numPage="@(Model.initPage+1)">
+                    <span aria-hidden="true" >&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    }
+</div>

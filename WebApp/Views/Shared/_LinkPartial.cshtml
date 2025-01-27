@@ -1,0 +1,34 @@
+@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<WebApp.Models.User> signManger;
+@if(signManger.IsSignedIn(User)){
+<li class="nav-item">
+    <a class="nav-link " asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link " asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+</li>
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle " data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+        Productos
+    </a>
+    <ul class="dropdown-menu">
+        <li><a class="dropdown-item" asp-area="" asp-controller="Category" asp-action="Index">Categorias</a></li>
+    </ul>
+</li>
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+        Usuarios
+    </a>
+    <ul class="dropdown-menu">
+        <li>
+            <a class="dropdown-item" asp-controller="User" asp-action="Register">Registro</a>
+        </li>
+        <li>
+            <a class="dropdown-item" asp-controller="User" asp-action="Index">Users</a>
+        </li>
+        <li>
+            <a class="dropdown-item" asp-controller="Role" asp-action="Index">Roles</a>
+        </li>
+    </ul>
+</li>
+}

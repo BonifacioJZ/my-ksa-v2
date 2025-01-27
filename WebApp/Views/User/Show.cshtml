@@ -1,0 +1,38 @@
+@using WebApp.Dto.User;
+@model UserDetailsDto;
+@{
+    ViewData["Title"] = ""+Model.UserName;
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="m-0 row justify-content-start">
+    <div class="p-2 col-auto">
+        <figure>
+            <blockquote class="blockquote">
+                <h4 class="display-6"> @Html.DisplayFor(modelItem=>modelItem.FirstName) @Html.DisplayFor(modelItem=>modelItem.LastName)</h4>
+            </blockquote>
+        </figure>
+        <hr>
+        <dl class="row">
+            <dt class="col-sm-6">
+                @Html.DisplayNameFor(modelItem=>Model.Email)
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(modelItem=>Model.Email)
+            </dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-6">
+                @Html.DisplayNameFor(ModelItem=>Model.Role)
+            </dt>
+            <dd class="col-sm-6">
+                @String.Join("",Model.Role.ToList())
+            </dd>
+        </dl>
+    </div>
+</div>
+<br/>
+<p>
+    <a class="btn" asp-controller="Users" asp-action="Index">Regresar</a>
+</p>

@@ -1,0 +1,40 @@
+@using WebApp.Dto.Role
+@model RoleEditDto
+@{
+    ViewData["Title"] = "Editar " + @Model.Name;
+}
+
+<h1>@ViewData["Title"]</h1>
+@if(TempData["Error_data"]!= null){
+    <div class="m-0 pt-2 row justify-content-center align-items-center">
+        <div class="col-auto p-1 text-center">
+            <div class="alert alert-dismissible alert-danger">
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                @TempData["Error_data"]
+            </div>
+        </div>
+    </div>
+}
+<br/>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Update">
+            <div asp-validation-summary="ModelOnly"></div>
+            <input type="hidden" asp-for="Id">
+            @Html.HiddenFor(model => model.Name)
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea class="form-control" asp-for="Description" rows="3"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <br>
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary"/>
+                <a class="btn" asp-controller="Role" asp-action="Index">Regresar</a>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,92 @@
+
+@model WebApp.Data.Pagination<WebApp.Models.Category>
+@{
+    ViewData["Title"] = "Categorias";
+    var previousWeakened = !Model.previousPages ? "disabled":"";
+    var nextWeakened = !Model.nextPages ? "disabled":"";
+}
+@if(Model.Count()>0){
+    <h1>@ViewData["Title"]</h1>
+    @if(TempData["Success_data"]!= null){
+    <div class="m-0 pt-2 row justify-content-center align-items-center">
+        <div class="col-auto p-1 text-center">
+            <div class="alert alert-dismissible alert-success">
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                @TempData["Success_data"]
+            </div>
+        </div>
+    </div>
+    }
+    <p>
+        <a asp-action="New" asp-controller="Category" class="btn btn-success">Nueva</a>
+    </p>
+    <form asp-controller="Category" asp-action="Index">
+        <p>
+            Buscar: <input type="text" name="search" value="@ViewData["FiltroActual"]" class="form-text"/>
+            <input type="submit" value="Buscar" class="btn btn-sm btn-dark"/>
+            <a asp-action="Index" class="btn btn-outline-info">Lista Completa</a>
+        </p>
+    </form>
+    <div class="table-responsive-md">
+        <table class="table">
+            <thead class="table-light">
+                <tr>
+                    <th>
+                        Nombre
+                    </th>
+                    <th>
+                        Acciones
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var item in Model){
+                    <tr>
+                        <th>@Html.DisplayFor(modelItem=>item.Name)</th>
+                        <th>
+                            <div class="btn-group btn-group-sm">
+                                    <a asp-controller="Category" asp-action="Show" asp-route-id="@item.Id" class="btn btn-primary btn-sm">Ver</a>
+                                    <a asp-controller="Category" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Editar</a>
+                                    <a  class="btn btn-danger btn-sm" asp-controller="Category" asp-action="Delete" asp-route-id="@item.Id" >Eliminar</a>
+                                </div>
+                        </th>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+@if(Model.pageSize>0){
+    <nav>
+        <ul class="pagination">
+            <li class="page-item">
+                <a asp-action="Index" class="page-link @previousWeakened" asp-route-numPage="@(Model.initPage-1)" >
+                            <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            @for(var i=Model.startPage; i<=Model.endPage;i++){
+                var activePage =(i==Model.initPage)? "active disable":"";
+                <li class="page-item">
+                    <a asp-action="Index" asp-route-numPage="@i" class="page-link @activePage">@i</a>
+                </li>
+            }
+            <li class="page-item">
+                <a  class="page-link @nextWeakened" asp-action="Index" asp-route-numPage="@(Model.initPage+1)">
+                    <span aria-hidden="true" >&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    }
+}else{
+    <form asp-controller="Category" asp-action="Index">
+        <p>
+            Buscar: <input type="text" name="search" value="@ViewData["FiltroActual"]" class="form-text"/>
+            <input type="submit" value="Buscar" class="btn btn-sm btn-dark"/>
+            <a asp-action="Index" class="btn btn-outline-info">Lista Completa</a>
+        </p>
+    </form>
+    <div class="text-center">
+        <h4 class="display-4">No Hay Categorias Registradas</h4>
+        <a class="btn btn-primary" asp-controller="Category" asp-action="New">Nueva Categoria</a>
+    </div>
+}
