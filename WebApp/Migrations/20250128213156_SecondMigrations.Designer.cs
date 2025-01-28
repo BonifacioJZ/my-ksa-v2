@@ -11,8 +11,8 @@ using WebApp;
 namespace WebApp.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20250113200714_UserRoleMigrations2")]
-    partial class UserRoleMigrations2
+    [Migration("20250128213156_SecondMigrations")]
+    partial class SecondMigrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -148,6 +148,63 @@ namespace WebApp.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("WebApp.Models.Permission", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("id");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("description ");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(150)
+                        .HasColumnType("name");
+
+                    b.Property<string>("NormalizeName")
+                        .HasColumnType("normalize_name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Permission");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "e0cfe636-34ac-4ec3-9ebb-6b93d34d2068",
+                            Description = "",
+                            Name = "SuperUser",
+                            NormalizeName = "SUPERUSER"
+                        },
+                        new
+                        {
+                            Id = "1ea52f10-91a4-4471-aecf-42b8ab0e295d",
+                            Description = "",
+                            Name = "Create",
+                            NormalizeName = "CREATE"
+                        },
+                        new
+                        {
+                            Id = "f25fb4a0-6f69-41fa-91ec-7ad8d73c3928",
+                            Description = "",
+                            Name = "Read",
+                            NormalizeName = "READ"
+                        },
+                        new
+                        {
+                            Id = "49edf019-552e-4935-bc79-412c555a5463",
+                            Description = "",
+                            Name = "Delete",
+                            NormalizeName = "DELETE"
+                        },
+                        new
+                        {
+                            Id = "646f73dc-ba28-4399-93fb-87e1be674755",
+                            Description = "",
+                            Name = "Update",
+                            NormalizeName = "UPDATE"
+                        });
+                });
+
             modelBuilder.Entity("WebApp.Models.Role", b =>
                 {
                     b.Property<string>("Id")
@@ -193,10 +250,32 @@ namespace WebApp.Migrations
                         },
                         new
                         {
-                            Id = "d2bdbfba-77b1-40f5-b00d-3c4704154589",
+                            Id = "ef4bb961-6ee2-4cd3-94ec-85de4f914158",
                             Description = "",
                             Name = "User",
                             NormalizedName = "USER"
+                        });
+                });
+
+            modelBuilder.Entity("WebApp.Models.RolePermission", b =>
+                {
+                    b.Property<string>("PermissionId")
+                        .HasColumnType("id");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("PermissionId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("RolePermission");
+
+                    b.HasData(
+                        new
+                        {
+                            PermissionId = "e0cfe636-34ac-4ec3-9ebb-6b93d34d2068",
+                            RoleId = "87e55637-05ef-45e1-8eb9-d881cdefa88b"
                         });
                 });
 
@@ -276,7 +355,7 @@ namespace WebApp.Migrations
                         {
                             Id = "6f41b021-3b66-484f-a673-7596f9c1aa07",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e00c7e5c-67e3-4ea8-a09a-0436f73dbe0e",
+                            ConcurrencyStamp = "fa427d1b-0e0d-4468-90e4-372d26a464fa",
                             Email = "root@root.com",
                             EmailConfirmed = false,
                             FirstName = "Admin",
@@ -284,9 +363,9 @@ namespace WebApp.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ROOT@ROOT.COM",
                             NormalizedUserName = "ROOT",
-                            PasswordHash = "AQAAAAIAAYagAAAAEFyE3FnOU0KNSKZD9N24Nm6mnPi+1aqEtxb/4tETI4PF4aPzzghWfBTpXMZuiCjOpw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEP1WR0BDfX9EcV6g2dV3CN0CunzLHRDFqUJHTe/WAwSr7ndIV8F0W56efo8yYNlpRQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "e8a76447-cad7-4f9e-8b0c-c08f29b28e98",
+                            SecurityStamp = "bb2e1cc9-f767-4017-84c6-1f302626bea4",
                             TwoFactorEnabled = false,
                             UserName = "Root"
                         });
@@ -339,6 +418,21 @@ namespace WebApp.Migrations
                     b.HasOne("WebApp.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("WebApp.Models.RolePermission", b =>
+                {
+                    b.HasOne("WebApp.Models.Permission", null)
+                        .WithMany()
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebApp.Models.Role", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

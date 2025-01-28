@@ -32,11 +32,22 @@ namespace WebApp
         {
             base.OnModelCreating(builder);
             // Descomentar las siguientes líneas para aplicar configuraciones específicas
+            builder.Entity<Permission>()
+            .HasMany(p=>p.Roles)
+            .WithMany(p=>p.Permissions)
+            .UsingEntity<RolePermission>(
+                p=>p.HasData(new{
+                    PermissionId = "e0cfe636-34ac-4ec3-9ebb-6b93d34d2068",
+                    RoleId="87e55637-05ef-45e1-8eb9-d881cdefa88b"
+                })
+            );
             builder.ApplyConfiguration(new RoleConfiguration());
             builder.ApplyConfiguration(new UserConfiguration());
             builder.ApplyConfiguration(new RoleUserConfiguration());
+            builder.ApplyConfiguration(new PermissionConfiguration());
         }
         public DbSet<Category> Categories {get;set;}
+        public DbSet<Permission> Permission {get;set;}
 
     }
 }
