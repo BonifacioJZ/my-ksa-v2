@@ -1,0 +1,69 @@
+@using WebApp.Models;
+@using WebApp.Data;
+@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<User> user;
+@model Pagination<Permission>;
+@{
+    ViewData["Title"] = "Permisos";
+    var previousWeakened = !Model.previousPages ? "disabled":"";
+    var nextWeakened = !Model.nextPages ? "disabled":"";
+}
+<h1>@ViewData["Title"]</h1>
+
+
+<form asp-controller="Category" asp-action="Index">
+    <p>
+        Buscar: <input type="text" name="search" value="@ViewData["FiltroActual"]" class="form-text"/>
+        <input type="submit" value="Buscar" class="btn btn-sm btn-dark"/>
+        <a asp-action="Index" class="btn btn-outline-info">Lista Completa</a>
+    </p>
+</form>
+<div class="table-responsive-md">
+    <table class="table">
+        <thead class="table-light">
+            <tr>
+                <th>Nombre</th>
+                <th>
+                    Acciones
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var item in Model){
+                <tr>
+                    <th>@Html.DisplayFor(modelItem=>item.Name)</th>
+                    <th>
+                        <div class="btn-group btn-group-sm">
+                            <a asp-controller="Permission" asp-action="show" asp-route-id="@item.Id" class="btn btn-primary btn-sm">Ver</a>
+                            @if(User.IsInRole("Root")){
+                                <a href="" class="btn  btn-warning btn-sm">Editar</a>
+                            }
+                        </div>
+                    </th>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @if(Model.pageSize>0){
+        <nav>
+        <ul class="pagination">
+            <li class="page-item">
+                <a asp-action="Index" class="page-link @previousWeakened" asp-route-numPage="@(Model.initPage-1)" >
+                            <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            @for(var i=Model.startPage; i<=Model.endPage;i++){
+                var activePage =(i==Model.initPage)? "active disable":"";
+                <li class="page-item">
+                    <a asp-action="Index" asp-route-numPage="@i" class="page-link @activePage">@i</a>
+                </li>
+            }
+            <li class="page-item">
+                <a  class="page-link @nextWeakened" asp-action="Index" asp-route-numPage="@(Model.initPage+1)">
+                    <span aria-hidden="true" >&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    }
+</div>

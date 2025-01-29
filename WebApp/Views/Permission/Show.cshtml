@@ -1,0 +1,24 @@
+@using WebApp.Dto.Permission;
+@model PermissionDetailDto;
+@{
+    ViewData["Title"] = "Permiso "+@Model.Name;
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="m-0 row justify-content-start">
+    <div class="p-2 col-auto">
+        <blockquote class="blockquote">
+            <h4 class="display-6">@Html.DisplayFor(modelItem=>Model.Name)</h4>
+        </blockquote>
+        <hr>
+        <figure class="text-center">
+            <blockquote class="blockquote">
+                <h4 class="display-6">@Html.DisplayNameFor(modelItem=>Model.Description)</h4>
+            </blockquote>
+            <figcaption class="blockquote-footer">
+                @Html.DisplayFor(modelItem => Model.Description)
+            </figcaption> 
+        </figure>
+    </div>
+</div>
