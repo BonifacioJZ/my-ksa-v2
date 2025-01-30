@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using WebApp.Data;
+using WebApp.Dto.Permission;
 using WebApp.Models;
 using WebApp.Service.Interface;
 
@@ -38,6 +39,35 @@ namespace WebApp.Controllers
 
             return View(permission);
         }
+
+        public async Task<IActionResult> Edit(string id){
+            var permission = await _service.EditDto(id);
+            if(permission == null) return NotFound();
+            return View(permission);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(string id,[Bind("Id","Name","Description")]PermissionEditDto dto){
+            if(id != dto.Id) return NotFound();
+            if(!ModelState.IsValid){
+                TempData["Error_data"] ="El Intento de Actualizacion no Valido";
+                return View("Edit",dto);
+            }
+            try{
+                await _service.Update(dto);
+            }catch(DbUpdateConcurrencyException){
+                if(!_service.Exists(id)){
+                    return NotFound();
+                }else{
+                    TempData["Error_data"] ="El Intento de Actualizacion no Valido";
+                    throw ;
+                }
+            }
+            TempData["Success_data"]="El permiso se a actualizado correctamente";
+            return RedirectToAction(nameof(Index));
+        }
+        
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

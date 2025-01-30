@@ -11,6 +11,17 @@
 <h1>@ViewData["Title"]</h1>
 
 
+@if(TempData["Success_data"]!= null){
+    <div class="m-0 pt-2 row justify-content-center align-items-center">
+        <div class="col-auto p-1 text-center">
+            <div class="alert alert-dismissible alert-success">
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                @TempData["Success_data"]
+            </div>
+        </div>
+    </div>
+}
+
 <form asp-controller="Category" asp-action="Index">
     <p>
         Buscar: <input type="text" name="search" value="@ViewData["FiltroActual"]" class="form-text"/>
@@ -36,7 +47,7 @@
                         <div class="btn-group btn-group-sm">
                             <a asp-controller="Permission" asp-action="show" asp-route-id="@item.Id" class="btn btn-primary btn-sm">Ver</a>
                             @if(User.IsInRole("Root")){
-                                <a href="" class="btn  btn-warning btn-sm">Editar</a>
+                                <a asp-controller="Permission" asp-action="Edit" asp-route-id="@item.Id" class="btn  btn-warning btn-sm">Editar</a>
                             }
                         </div>
                     </th>

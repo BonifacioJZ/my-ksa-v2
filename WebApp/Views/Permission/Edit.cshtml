@@ -1,7 +1,7 @@
-@using WebApp.Dto.Role
-@model RoleEditDto
+@using WebApp.Dto.Permission;
+@model PermissionEditDto;
 @{
-    ViewData["Title"] = "Editar Rol " + @Model.Name;
+    ViewData["Title"] = "Editar Permiso "+Model.Name;
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -15,12 +15,12 @@
         </div>
     </div>
 }
-<br/>
+<br>
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Update">
             <div asp-validation-summary="ModelOnly"></div>
-            <input type="hidden" asp-for="Id">
+            @Html.HiddenFor(model => model.Id)
             @Html.HiddenFor(model => model.Name)
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
@@ -30,7 +30,7 @@
             <br>
             <div class="form-group">
                 <input type="submit" value="Guardar" class="btn btn-primary"/>
-                <a class="btn" asp-controller="Role" asp-action="Index">Regresar</a>
+                <a class="btn" asp-controller="Permission" asp-action="Index">Regresar</a>
             </div>
         </form>
     </div>

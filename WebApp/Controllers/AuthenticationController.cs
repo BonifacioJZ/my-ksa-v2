@@ -53,6 +53,8 @@ namespace WebApp.Controllers
                 if (result.Succeeded)
                 {
                     // Redirige al índice si el inicio de sesión es exitoso.
+                    var user = HttpContext.User;
+                    
                     return RedirectToAction("Index", "Home");
                 }
                 // Agrega un error al estado del modelo si el inicio de sesión falla.

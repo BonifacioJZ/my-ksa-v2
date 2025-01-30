@@ -11,5 +11,9 @@ namespace WebApp.Service.Interface
     {
         IQueryable<Permission> All();
         Task<PermissionDetailDto?> GetDtoById(string id);
+        Task<PermissionEditDto?> EditDto(string id);
+        Task<PermissionEditDto?> Update(PermissionEditDto dto);
+        bool Exists(string id);
+
     }
 }

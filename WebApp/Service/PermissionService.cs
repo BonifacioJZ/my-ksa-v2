@@ -20,16 +20,42 @@ namespace WebApp.Service
         }
         public IQueryable<Permission> All()
         {
-            var permissions = _context.Permission.Select((e)=>e);
+            var permissions = _context.Permission.Where(p=>p.Name !="SuperUser").Select((e)=>e);
             return permissions;
+        }
+
+        public async Task<PermissionEditDto?> EditDto(string id)
+        {
+            var permission = _mapper.Map<PermissionEditDto>(
+                await Found(id)
+            );
+            return permission;
+        }
+
+        public bool Exists(string id)
+        {
+            return (_context.Permission?.Any(r => r.Id == id)).GetValueOrDefault();
         }
 
         public async Task<PermissionDetailDto?> GetDtoById(string id)
         {
             var permission = _mapper.Map<PermissionDetailDto>(
-                await _context.Permission.FindAsync(id)
+                await Found(id)
             );
             return permission;
+        }
+
+        public async Task<PermissionEditDto?> Update(PermissionEditDto dto)
+        {
+            var permission = _mapper.Map<Permission>(dto);
+            _context.Permission.Update(permission);
+            var result = await _context.SaveChangesAsync();
+            if (result==0) return null;
+            return dto;
+        }
+        
+        private async Task<Permission?> Found(string id){
+            return await _context.Permission.FindAsync(id);
         }
     }
 }

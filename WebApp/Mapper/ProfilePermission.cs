@@ -13,6 +13,7 @@ namespace WebApp.Mapper
         public ProfilePermission()
         {
             CreateMap<Permission,PermissionDetailDto>().ReverseMap();
+            CreateMap<PermissionEditDto,Permission>().ReverseMap();
         }
     }
 }
