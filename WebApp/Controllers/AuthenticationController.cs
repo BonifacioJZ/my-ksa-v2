@@ -2,10 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WebApp.Dto.Authentication;
+using WebApp.Models;
 using WebApp.Service.Interface;
 
 namespace WebApp.Controllers
@@ -17,16 +20,18 @@ namespace WebApp.Controllers
     {
         private readonly IUserService _userService;
         private readonly ILogger<AuthenticationController> _logger;
+        private readonly UserManager<User> userManager;
 
         /// <summary>
         /// Constructor de la clase AuthenticationController.
         /// </summary>
         /// <param name="logger">Instancia de ILogger para el controlador.</param>
         /// <param name="userService">Servicio de usuario para manejar la autenticación.</param>
-        public AuthenticationController(ILogger<AuthenticationController> logger, IUserService userService)
+        public AuthenticationController(ILogger<AuthenticationController> logger, IUserService userService,UserManager<User> userManager)
         {
             _logger = logger;
             _userService = userService;
+            this.userManager = userManager;
         }
 
         /// <summary>
@@ -53,8 +58,8 @@ namespace WebApp.Controllers
                 if (result.Succeeded)
                 {
                     // Redirige al índice si el inicio de sesión es exitoso.
-                    var user = HttpContext.User;
-                    
+                    var user = await userManager.GetUserAsync(HttpContext.User);
+                    var list = User.Claims.ToList();
                     return RedirectToAction("Index", "Home");
                 }
                 // Agrega un error al estado del modelo si el inicio de sesión falla.
