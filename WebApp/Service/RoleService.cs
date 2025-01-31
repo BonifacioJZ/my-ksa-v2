@@ -32,7 +32,9 @@ namespace WebApp.Service.Interface
 
         public IQueryable<Role> All()
         {
-            var roles = _roleManager.Roles.Where(r => r.Name != "Root");
+            var roles = _roleManager.Roles.Where(
+                r=>r.Name!="Root"
+            );
             return roles; 
         }
 
@@ -104,8 +106,7 @@ namespace WebApp.Service.Interface
         /// <returns>DTO con los detalles del rol.</returns>
         public async Task<RoleDetailsDto> FindById(Guid id)
         {
-            var role = _mapper.Map<RoleDetailsDto>(await 
-            _roleManager.FindByIdAsync(id.ToString()));
+            var role = _mapper.Map<RoleDetailsDto>(await FoundAdvanceById(id.ToString()));
             return role;
         }
 
@@ -124,6 +125,20 @@ namespace WebApp.Service.Interface
             
             var result = await _roleManager.UpdateAsync(updateRole);
             return result;
+        }
+
+        public async Task<Role?> FoundAdvanceById(string id){
+            var role = await _roleManager.Roles.Where(r=>r.Id==id)
+                .Include(p=>p.Permissions)
+                .FirstOrDefaultAsync();
+            
+            return role;
+        }
+        public async Task<Role?> FoundAdvanceByName(string name){
+            var role = await _roleManager.Roles.Where(r=>r.Name==name)
+                .Include(p=>p.Permissions)
+                .FirstOrDefaultAsync();
+            return role;
         }
     }
 }

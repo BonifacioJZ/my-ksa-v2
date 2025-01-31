@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
@@ -21,14 +22,16 @@ namespace WebApp.Service
         private readonly Context _context;
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
+        private readonly IRoleService _roleService;
         /// <summary>
         /// Constructor de la clase UserService.
         /// </summary>
         /// <param name="signInManager">Instancia de SignInManager para manejar el inicio y cierre de sesión.</param>
         /// <param name="context">Contexto de la base de datos.</param>
         /// <param name="userManager">Instancia de UserManager para manejar usuarios.</param>
-        public UserService(SignInManager<User> signInManager, Context context, UserManager<User> userManager,IMapper mapper)
+        public UserService(IRoleService roleService,SignInManager<User> signInManager, Context context, UserManager<User> userManager,IMapper mapper)
         {
+            _roleService = roleService;
             _signInManager = signInManager;
             _context = context;
             _userManager = userManager;
@@ -74,6 +77,31 @@ namespace WebApp.Service
             var role = await _userManager.GetRolesAsync(user);
             return role;
         }
+        public async Task<User?> GetUserByUserName(string name){
+            return await _signInManager.UserManager.Users.Where(u=>u.UserName==name).FirstOrDefaultAsync();
+        }
+        private async void AddClaims(IList<string> roles, User user){
+            var rol = new List<Role>();
+            var claims = new List<Claim>();
+            
+            foreach(var r in roles){
+                var role = await _roleService.FoundAdvanceByName(r);
+                if(role!=null && role.Permissions!.Count>0){
+                    foreach(var p in role.Permissions){
+                        claims.Add(new Claim("Permission",p.Name!));
+                    }
+                }
+            }
+
+            if(claims.Count>0){
+                var existingClaim = await _userManager.GetClaimsAsync(user);
+                if(!existingClaim.Any(c=>c.Type=="Permission")){
+                    await _userManager.AddClaimsAsync(user,claims);
+                }
+            }
+
+
+        }
 
         /// <summary>
         /// Método para iniciar sesión.
@@ -83,6 +111,11 @@ namespace WebApp.Service
         public async Task<SignInResult> LogIn(LoginDto dto)
         {
             // Intenta iniciar sesión con los datos proporcionados.
+            var user = await GetUserByUserName(dto.Username!);
+            if(user !=null){
+                var roles = await GetRoleByUser(user);
+                AddClaims(roles,user);
+            }
             var result = await _signInManager.PasswordSignInAsync(dto.Username!, dto.Password!, dto.RememberMe, false);
             return result;
         }

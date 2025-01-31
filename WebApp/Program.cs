@@ -54,7 +54,7 @@ builder.Services.AddIdentity<User,Role>(
 builder.Services.AddAuthorization(policy=>{
     policy.AddPolicy("SuperUser",opt=>{
         opt.RequireRole(Roles.Root.ToString());
-        opt.RequireClaim("SuperUser","Root");
+        opt.RequireClaim("Permission","Root");
     });
 });
 var app = builder.Build();

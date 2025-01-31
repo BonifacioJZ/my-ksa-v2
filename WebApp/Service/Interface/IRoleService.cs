@@ -16,6 +16,7 @@ namespace WebApp.Service.Interface
         Task<RoleDetailsDto> FindById(Guid id);
         Task<RoleEditDto?> Edit(Guid id);
         Task<IdentityResult?> Update(RoleEditDto role);
+        Task<Role?> FoundAdvanceByName(string name);
         bool Exist(Guid id);
         void Destroy(Guid id);
     }

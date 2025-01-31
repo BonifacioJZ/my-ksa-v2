@@ -143,3 +143,4 @@
 /home/bonifacio/Projects/Net/my-ksa-v2/WebApp/bin/Debug/net8.0/runtimes/win-arm64/native/e_sqlite3.dll
 /home/bonifacio/Projects/Net/my-ksa-v2/WebApp/bin/Debug/net8.0/runtimes/win-x64/native/e_sqlite3.dll
 /home/bonifacio/Projects/Net/my-ksa-v2/WebApp/bin/Debug/net8.0/runtimes/win-x86/native/e_sqlite3.dll
+/home/bonifacio/Projects/Net/my-ksa-v2/WebApp/obj/Debug/net8.0/WebApp.sourcelink.json

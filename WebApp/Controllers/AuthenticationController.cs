@@ -21,7 +21,6 @@ namespace WebApp.Controllers
         private readonly IUserService _userService;
         private readonly ILogger<AuthenticationController> _logger;
         private readonly UserManager<User> userManager;
-
         /// <summary>
         /// Constructor de la clase AuthenticationController.
         /// </summary>
@@ -58,8 +57,7 @@ namespace WebApp.Controllers
                 if (result.Succeeded)
                 {
                     // Redirige al índice si el inicio de sesión es exitoso.
-                    var user = await userManager.GetUserAsync(HttpContext.User);
-                    var list = User.Claims.ToList();
+                    var user = HttpContext.User;
                     return RedirectToAction("Index", "Home");
                 }
                 // Agrega un error al estado del modelo si el inicio de sesión falla.
