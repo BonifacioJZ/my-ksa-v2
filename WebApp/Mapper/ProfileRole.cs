@@ -14,13 +14,14 @@ namespace WebApp.Mapper
         public ProfileRole()
         {
             CreateMap<Role,RoleOutDto>().ReverseMap();
-            CreateMap<PermissionOutDto,Permission>().ReverseMap();
+            
             CreateMap<Role,RoleDetailsDto>()
             .ForMember(r=>r.PermissionsDto,y=>y.MapFrom(
                 z=>z.Permissions
             )).ReverseMap();
             CreateMap<Role,RoleEditDto>().ReverseMap();
             CreateMap<Role,RoleIntDto>().ReverseMap();
+            CreateMap<Role,RolePermissionDto>().ReverseMap();
         }
     }
 }

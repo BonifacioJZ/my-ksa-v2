@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using WebApp.Dto.Permission;
 using WebApp.Models;
 using WebApp.Service.Interface;
@@ -35,6 +36,14 @@ namespace WebApp.Service
         public bool Exists(string id)
         {
             return (_context.Permission?.Any(r => r.Id == id)).GetValueOrDefault();
+        }
+
+        public async Task<ICollection<PermissionOutDto>> GetAllDto()
+        {
+            var permission = _mapper.Map<ICollection<PermissionOutDto>>(
+                await _context.Permission.Where(p=>p.Name!="SuperUser").ToListAsync()
+            );
+            return permission;
         }
 
         public async Task<PermissionDetailDto?> GetDtoById(string id)

@@ -19,8 +19,10 @@ namespace WebApp.Controllers
     {
         private readonly ILogger<RoleController> _logger;
         private readonly IRoleService _roleService;
-        public RoleController(ILogger<RoleController> logger, IRoleService roleService)
+        private readonly IPermissionService _permissionService;
+        public RoleController(ILogger<RoleController> logger, IRoleService roleService,IPermissionService permissionService)
         {
+            _permissionService = permissionService;
             _logger = logger;
             _roleService = roleService;
         }
@@ -111,6 +113,15 @@ namespace WebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> AssignPermission(string id){
+            var role = await _roleService.FindById(id);
+            var permission = await _permissionService.GetAllDto();
+            if(role==null){
+                return NotFound();
+            }
+            role.Permissions = permission;
+            return View(role);
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

@@ -14,6 +14,7 @@ namespace WebApp.Mapper
         {
             CreateMap<Permission,PermissionDetailDto>().ReverseMap();
             CreateMap<PermissionEditDto,Permission>().ReverseMap();
+            CreateMap<PermissionOutDto,Permission>().ReverseMap();
         }
     }
 }

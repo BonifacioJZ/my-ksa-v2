@@ -1,0 +1,44 @@
+@using WebApp.Dto.Role
+@model RolePermissionDto
+@{
+    ViewData["Title"] = "Asignar Permisos a el Rol "+ Model.Name;
+}
+
+<h1>@ViewData["Title"]</h1>
+<br>
+<div class="m-0 row justify-content-start">
+    <div class="p-2 col-auto">
+        <figure>
+            <blockquote class="blockquote">
+                <h4 class="display-6">@Html.DisplayFor(modelItem => Model.Name)</h4>
+            </blockquote>                                
+        </figure>
+        <hr/>
+        <figure class="text-center">
+            <blockquote class="blockquote">
+                <h4 class="display-6">@Html.DisplayNameFor(modelItem=>Model.Description)</h4>
+            </blockquote>
+            <figcaption class="blockquote-footer">
+                @Html.DisplayFor(modelItem => Model.Description)
+            </figcaption>                                
+        </figure>
+        <hr/>
+    </div>
+</div>
+<br>
+<div class="row">
+    <div class="col-md-4">
+        <form >
+            <div asp-validation-summary="ModelOnly"></div>
+            @Html.HiddenFor(model=>model.Name)
+            @Html.HiddenFor(model=>model.Description)
+            @Html.HiddenFor(model=>model.Id)
+            @foreach(var permission in Model.Permissions){
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="@permission.Id"/>
+                    @Html.DisplayFor(Model=>permission.Name)
+                </div>
+            }
+        </form>
+    </div>
+</div>

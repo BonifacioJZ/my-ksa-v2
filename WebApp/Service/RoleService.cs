@@ -140,5 +140,13 @@ namespace WebApp.Service.Interface
                 .FirstOrDefaultAsync();
             return role;
         }
+
+        public async Task<RolePermissionDto?> FindById(string id)
+        {
+            var role = _mapper.Map<RolePermissionDto>(
+                await _roleManager.FindByIdAsync(id)
+            );
+            return role;
+        }
     }
 }

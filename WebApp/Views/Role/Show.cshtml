@@ -1,4 +1,6 @@
 @using WebApp.Dto.Role
+@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<User> signInManager
 @model RoleDetailsDto
 @{
     ViewData["Title"] = ""+@Model.Name;
@@ -26,4 +28,7 @@
 <br/>
 <p>
     <a class="btn" asp-controller="Role" asp-action="Index">Regresar</a>
+    @if(User.IsInRole("Root")|| User.IsInRole("Admin")){
+        <a class="btn btn-info" asp-controller="Role" asp-action="AssignPermission" asp-route-id="@Model.Id"> Asignar Permisos</a>
+    }
 </p>

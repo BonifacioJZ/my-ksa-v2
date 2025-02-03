@@ -10,6 +10,7 @@ namespace WebApp.Service.Interface
     public interface IPermissionService
     {
         IQueryable<Permission> All();
+        Task<ICollection<PermissionOutDto>> GetAllDto();
         Task<PermissionDetailDto?> GetDtoById(string id);
         Task<PermissionEditDto?> EditDto(string id);
         Task<PermissionEditDto?> Update(PermissionEditDto dto);

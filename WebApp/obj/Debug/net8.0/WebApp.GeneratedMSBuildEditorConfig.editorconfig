@@ -62,6 +62,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUGVybWlzc2lvbi9TaG93LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[/home/bonifacio/Projects/Net/my-ksa-v2/WebApp/Views/Role/AssignPermission.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUm9sZS9Bc3NpZ25QZXJtaXNzaW9uLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [/home/bonifacio/Projects/Net/my-ksa-v2/WebApp/Views/Role/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUm9sZS9DcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
